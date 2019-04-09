@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <title>Example using `omise.js` alternative payment form</title>
+</head>
+<body>
+<form class="checkout-form" name="checkoutForm" method="POST" action="/checkout">
+  <script type="text/javascript" src="https://cdn.omise.co/omise.js"
+          data-key="pkey_test_528pq8jk0a69yw1vz79"
+          data-frame-label="Merchant site name"
+          data-frame-description="Merchant site description"
+          data-default-payment-method="credit_card"
+          data-amount="{{currency}}"
+          data-currency="thb"
+          data-button-label="Payment">
+  </script>
+</form>
+
+</body>
+</html>
