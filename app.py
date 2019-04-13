@@ -19,7 +19,7 @@ def charge(token, db_token):
         amount=100000,
         currency='thb',
         descption='test',
-        ip='127.0.0.1',
+        ip='178.128.80.248',
         card=token
     )
     if ch._attributes['paid']:
