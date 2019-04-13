@@ -56,7 +56,8 @@ def checkout():
         ret = charge(token, db_token)
     else:
         return render_template('fail.html')
-    if ret == true:
+
+    if ret == True:
         return render_template('success.html')
     else:
         return render_template('fail.html')
