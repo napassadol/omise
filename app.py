@@ -6,7 +6,7 @@ app = Flask(__name__, static_folder='templates/styles')
 
 def connectDB():
     mydb = mysql.connector.connect(
-        host="178.128.111.50",
+        host="68.183.227.154",
         user="admin2",
         passwd="192837465",
         database="payment"
