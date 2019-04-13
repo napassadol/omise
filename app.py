@@ -13,7 +13,7 @@ def connectDB():
     )
     return mydb
 
-def charge(token):
+def charge(token, db_token):
     omise.api_secret = 'skey_test_528pq8jk1ws5hvq6lyu'
     ch = omise.Charge.create(
         amount=100000,
@@ -22,6 +22,15 @@ def charge(token):
         ip='127.0.0.1',
         card=token
     )
+    if ch._attributes['paid']:
+        mydb = connectDB()
+        mycursor = mydb.cursor()
+        sql = "UPDATE payment SET pay_status = 1 WHERE token = '" + db_token + "'"
+        mycursor.execute(sql)
+        mydb.commit()
+        return True
+    else:
+        return False
 
 @app.route("/", methods=['GET'])
 def index():
@@ -29,19 +38,28 @@ def index():
 
     mydb = connectDB()
     mycursor = mydb.cursor()
-    querystr = "SELECT price FROM payment WHERE token = '" + str(token) + "';"
+    querystr = "SELECT price, pay_status FROM payment WHERE token = '" + str(token) + "';"
     mycursor.execute(querystr)
     myresult = mycursor.fetchall()
-    price = int(myresult[0][0]) * 100
-    print(price)
-    return render_template('index.html', currency=price)
+    if int(myresult[0][1]) == 1:
+        return render_template('success.html')
+    else:
+        price = int(myresult[0][0]) * 100
+        return render_template('index.html', currency=price, db_token=token)
 
 
 @app.route("/checkout", methods=['POST'])
 def checkout():
     token = request.form.getlist('omiseToken')[0]
-    charge(token)
-    return render_template('index.html', currency=0)
+    db_token = request.form.getlist('db_token')[0]
+    if token != '':
+        ret = charge(token, db_token)
+    else:
+        return render_template('fail.html')
+    if ret == true:
+        return render_template('success.html')
+    else:
+        return render_template('fail.html')
 
 
 if __name__ == '__main__':
