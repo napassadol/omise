@@ -13,10 +13,10 @@ def connectDB():
     )
     return mydb
 
-def charge(token, db_token):
+def charge(token, db_token, price):
     omise.api_secret = 'skey_test_528pq8jk1ws5hvq6lyu'
     ch = omise.Charge.create(
-        amount=100000,
+        amount=int(price),
         currency='thb',
         descption='test',
         ip='178.128.80.248',
@@ -52,8 +52,9 @@ def index():
 def checkout():
     token = request.form.getlist('omiseToken')[0]
     db_token = request.form.getlist('db_token')[0]
+    price = request.form.getlist('price')[0]
     if token != '':
-        ret = charge(token, db_token)
+        ret = charge(token, db_token, price)
     else:
         return render_template('fail.html')
 
